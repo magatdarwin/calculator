@@ -43,28 +43,52 @@ function getSymbol(event) {
 function updateOngoing() {
     const ongoingContainer = document.querySelector('#ongoing'); 
     
-    if (!enteredFirstNumber) {
+    if (firstNumber === null) {
         ongoingContainer.innerText = ongoing;
     }
     else {
-        ongoingContainer.innerText = `${firstNumber} ${operand} ${ongoing}`;
+        ongoingContainer.innerText = `${firstNumber} ${symbol} ${ongoing}`;
     }
+}
+
+function updateFinal() {
+    const container = document.querySelector('#final');
+    final.innerText = result;
 }
 
 const OPERATORS = ['add', 'subtract', 'multiply', 'divide'];
 
 let ongoing = '';
-let firstNumber = 0;
-let secondNumber = 0;
-let enteredFirstNumber = false;
-let operand = '';
+let firstNumber = null;
+let secondNumber = null;
+let symbol = '';
+let operation = '';
+let result = null;
 
 const buttons = document.querySelectorAll('.button');
 buttons.forEach(button => button.addEventListener('click', event => {
     const input = event.target.value;
 
-    if (!isNaN(Number(input))) {
+    if(!isNaN(Number(input))) {
         ongoing += input;
+    }
+    else if(OPERATORS.includes(input)) {
+        if(firstNumber === null) {
+            firstNumber = Number(ongoing);
+            ongoing = '';
+            operation = input;
+            symbol = getSymbol(event);
+        }
+        else {
+            secondNumber = Number(ongoing);
+            firstNumber = operate(operation, firstNumber, secondNumber);
+            operation = input;
+            symbol = getSymbol(event);
+            secondNumber = null;
+            ongoing = '';
+            result = firstNumber;
+            updateFinal();
+        }
     }
     
     updateOngoing();
