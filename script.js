@@ -36,15 +36,38 @@ function getValue(event) {
     }
 }
 
+function getSymbol(event) {
+    return event.target.innerText;
+}
+
+function updateOngoing() {
+    const ongoingContainer = document.querySelector('#ongoing'); 
+    
+    if (!enteredFirstNumber) {
+        ongoingContainer.innerText = ongoing;
+    }
+    else {
+        ongoingContainer.innerText = `${firstNumber} ${operand} ${ongoing}`;
+    }
+}
+
 const OPERATORS = ['add', 'subtract', 'multiply', 'divide'];
 
 let ongoing = '';
 let firstNumber = 0;
 let secondNumber = 0;
+let enteredFirstNumber = false;
+let operand = '';
 
 const buttons = document.querySelectorAll('.button');
 buttons.forEach(button => button.addEventListener('click', event => {
-    console.log(getValue(event));
+    const input = event.target.value;
+
+    if (!isNaN(Number(input))) {
+        ongoing += input;
+    }
+    
+    updateOngoing();
 }))
 
 
