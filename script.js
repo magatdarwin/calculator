@@ -10,19 +10,19 @@ function multiply(firstNumber, secondNumber) {
     return Number(firstNumber) * Number(secondNumber);
 }
 
-function operate(operation, firstNumber, secondNumber) {
-    if (typeof window[operation] === 'function') {
-        return window[operation](firstNumber, secondNumber);
-    }
-}
-
 function divide(firstNumber, secondNumber) {
     if(Number(secondNumber) === 0) {
         alert('Who hurt you?');
         return;
     }
 
-    return  Number(firstNumber) / Number(secondNumber);
+    return Number(firstNumber) / Number(secondNumber);
+}
+
+function operate(operation, firstNumber, secondNumber) {
+    if (typeof window[operation] === 'function') {
+        return window[operation](firstNumber, secondNumber);
+    }
 }
 
 function getValue(event) {
