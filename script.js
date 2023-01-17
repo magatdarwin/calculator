@@ -56,6 +56,38 @@ function updateFinal() {
     final.innerText = result;
 }
 
+function updateCalculator(event) {
+    const input = event.target.value;
+
+    if(!isNaN(Number(input)) || (input === '.' && !ongoing.includes('.'))) {
+        ongoing += input;
+        updateOngoing();
+    }
+    else if(OPERATORS.includes(input) || input === 'equals') {
+        if(firstNumber === null) {
+            firstNumber = Number(ongoing);
+        }
+        else if(secondNumber === null && ongoing !== ''){
+            secondNumber = Number(ongoing);
+            result = operate(operation, firstNumber, secondNumber);
+            firstNumber = result;
+            secondNumber = null;            
+        }
+
+        if(OPERATORS.includes(input)) {
+            operation = input;
+        }
+        else if (input === 'equals') {
+            operation = '';
+        }
+
+        ongoing = '';
+        symbol = getSymbol(event);
+        updateOngoing();
+        updateFinal();
+    }
+}
+
 const OPERATORS = ['add', 'subtract', 'multiply', 'divide'];
 
 let ongoing = '';
@@ -66,34 +98,7 @@ let operation = '';
 let result = null;
 
 const buttons = document.querySelectorAll('.button');
-buttons.forEach(button => button.addEventListener('click', event => {
-    const input = event.target.value;
-
-    if(!isNaN(Number(input))) {
-        ongoing += input;
-    }
-    else if(OPERATORS.includes(input)) {
-        if(firstNumber === null) {
-            firstNumber = Number(ongoing);
-            ongoing = '';
-            operation = input;
-            symbol = getSymbol(event);
-        }
-        else {
-            secondNumber = Number(ongoing);
-            firstNumber = operate(operation, firstNumber, secondNumber);
-            operation = input;
-            symbol = getSymbol(event);
-            secondNumber = null;
-            ongoing = '';
-            result = firstNumber;
-            updateFinal();
-        }
-    }
-    
-    updateOngoing();
-}))
-
+buttons.forEach(button => button.addEventListener('click', updateCalculator));
 
 // Temporary
-window.addEventListener('keydown', e => console.log(e.key));
+// window.addEventListener('keydown', e => console.log(e.key));
