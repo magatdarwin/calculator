@@ -42,13 +42,8 @@ function getSymbol(event) {
 
 function updateOngoing() {
     const ongoingContainer = document.querySelector('#ongoing'); 
-    
-    if (firstNumber === null) {
-        ongoingContainer.innerText = ongoing;
-    }
-    else {
-        ongoingContainer.innerText = `${firstNumber} ${symbol} ${ongoing}`;
-    }
+
+    ongoingContainer.innerText = firstNumber === null ? ongoing : `${firstNumber} ${symbol} ${ongoing}`;
 }
 
 function updateFinal() {
