@@ -36,10 +36,6 @@ function getValue(event) {
     }
 }
 
-function getSymbol(event) {
-    return event.target.innerText;
-}
-
 function updateOngoing() {
     const ongoingContainer = document.querySelector('#ongoing'); 
 
@@ -52,7 +48,22 @@ function updateFinal() {
 }
 
 function updateCalculator(event) {
-    const input = event.target.value;
+    let input;
+
+    if(event.type === 'click') {
+        input = event.target.value;
+    }
+    else if(event.type === 'keydown') {
+        let temp = event.key;
+
+        if(!isNaN(Number(temp)) || temp === '.') {
+            input = temp;
+        }
+        else if (KEYDOWN_MAP[temp] !== undefined) {
+            input = KEYDOWN_MAP[temp];
+        }
+        else return;
+    }
 
     if(!isNaN(Number(input)) || (input === '.' && !ongoing.includes(input))) {
         // Do nothing if the user enters a number right after clicking equals
@@ -76,11 +87,11 @@ function updateCalculator(event) {
         }
 
         ongoing = '';
-        symbol = getSymbol(event);
+        symbol = SYMBOL_MAP[input];
         operation = OPERATORS.includes(input) ? input : null;
     }
     else if(OPERATORS.includes(input) && operation === null) {
-        symbol = getSymbol(event);
+        symbol = SYMBOL_MAP[input];
         operation = input;
     }
     else if(input === 'delete') {
@@ -103,13 +114,31 @@ function initializeValues() {
     result = null;
 }
 
+function decode(str) {
+    let txt = new DOMParser().parseFromString(str, "text/html");
+
+    return txt.documentElement.textContent;
+}
+
 const OPERATORS = ['add', 'subtract', 'multiply', 'divide'];
+const KEYDOWN_MAP = {
+    '+' : 'add',
+    '-' : 'subtract',
+    '*' : 'multiply',
+    '/' : 'divide',
+    'Enter' : 'equals'
+};
+const SYMBOL_MAP = {
+    'add' : decode('&plus;'),
+    'subtract' : decode('&minus;'),
+    'multiply' : decode('&times;'),
+    'divide' : decode('&divide;') ,
+    'equals' : decode('&equals;')
+}
 
 let ongoing, firstNumber, secondNUmber, symbol, operation, result;
 initializeValues();
 
 const buttons = document.querySelectorAll('.button');
 buttons.forEach(button => button.addEventListener('click', updateCalculator));
-
-// Temporary
-window.addEventListener('keydown', e => console.log(e.key));
+window.addEventListener('keydown', updateCalculator);
