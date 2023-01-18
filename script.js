@@ -13,7 +13,7 @@ function multiply(firstNumber, secondNumber) {
 function divide(firstNumber, secondNumber) {
     if(Number(secondNumber) === 0) {
         alert('Who hurt you?');
-        return;
+        return null;
     }
 
     return Number(firstNumber) / Number(secondNumber);
@@ -81,7 +81,6 @@ function updateCalculator(event) {
         operation = input;
     }
 
-    console.log(operation);
     updateOngoing();
 }
 
