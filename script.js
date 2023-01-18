@@ -54,8 +54,11 @@ function updateFinal() {
 function updateCalculator(event) {
     const input = event.target.value;
 
-    if(!isNaN(Number(input)) || (input === '.' && !ongoing.includes(input) )) {
-        ongoing += input;
+    if(!isNaN(Number(input)) || (input === '.' && !ongoing.includes(input))) {
+        // Do nothing if the user enters a number right after clicking equals
+        if(!(firstNumber !== null && operation === null)) {
+            ongoing += input;
+        }
     }
     else if((OPERATORS.includes(input) || input === 'equals') && ongoing !== '') {
         if(firstNumber === null) {
@@ -80,21 +83,33 @@ function updateCalculator(event) {
         symbol = getSymbol(event);
         operation = input;
     }
+    else if(input === 'delete') {
+        ongoing = ongoing.slice(0, ongoing.length - 1);
+    }
+    else if(input === 'clear') {
+        initializeValues();
+        updateFinal();
+    }
 
     updateOngoing();
 }
 
+function initializeValues() {
+    ongoing = '';
+    firstNumber = null;
+    secondNumber = null;
+    symbol = '';
+    operation = null;
+    result = null;
+}
+
 const OPERATORS = ['add', 'subtract', 'multiply', 'divide'];
 
-let ongoing = '';
-let firstNumber = null;
-let secondNumber = null;
-let symbol = '';
-let operation = null;
-let result = null;
+let ongoing, firstNumber, secondNUmber, symbol, operation, result;
+initializeValues();
 
 const buttons = document.querySelectorAll('.button');
 buttons.forEach(button => button.addEventListener('click', updateCalculator));
 
 // Temporary
-// window.addEventListener('keydown', e => console.log(e.key));
+window.addEventListener('keydown', e => console.log(e.key));
