@@ -136,7 +136,13 @@ const SYMBOL_MAP = {
     'equals' : decode('&equals;')
 }
 
-let ongoing, firstNumber, secondNUmber, symbol, operation, result;
+let ongoing, 
+    firstNumber,
+    secondNumber, 
+    symbol, 
+    operation, 
+    result;
+
 initializeValues();
 
 const buttons = document.querySelectorAll('.button');
