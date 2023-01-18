@@ -54,33 +54,35 @@ function updateFinal() {
 function updateCalculator(event) {
     const input = event.target.value;
 
-    if(!isNaN(Number(input)) || (input === '.' && !ongoing.includes('.'))) {
+    if(!isNaN(Number(input)) || (input === '.' && !ongoing.includes(input) )) {
         ongoing += input;
-        updateOngoing();
     }
-    else if(OPERATORS.includes(input) || input === 'equals') {
+    else if((OPERATORS.includes(input) || input === 'equals') && ongoing !== '') {
         if(firstNumber === null) {
-            firstNumber = Number(ongoing);
+            firstNumber = ongoing;
         }
-        else if(secondNumber === null && ongoing !== ''){
-            secondNumber = Number(ongoing);
-            result = operate(operation, firstNumber, secondNumber);
-            firstNumber = result;
-            secondNumber = null;            
+        else if(secondNumber === null) {
+            secondNumber = ongoing;
         }
 
-        if(OPERATORS.includes(input)) {
-            operation = input;
-        }
-        else if (input === 'equals') {
-            operation = '';
+        if(firstNumber !== null && secondNumber !== null) {
+            result = operate(operation, firstNumber, secondNumber);
+            firstNumber = result;
+            secondNumber = null;
+            updateFinal();
         }
 
         ongoing = '';
         symbol = getSymbol(event);
-        updateOngoing();
-        updateFinal();
+        operation = OPERATORS.includes(input) ? input : null;
     }
+    else if(OPERATORS.includes(input) && operation === null) {
+        symbol = getSymbol(event);
+        operation = input;
+    }
+
+    console.log(operation);
+    updateOngoing();
 }
 
 const OPERATORS = ['add', 'subtract', 'multiply', 'divide'];
@@ -89,7 +91,7 @@ let ongoing = '';
 let firstNumber = null;
 let secondNumber = null;
 let symbol = '';
-let operation = '';
+let operation = null;
 let result = null;
 
 const buttons = document.querySelectorAll('.button');
