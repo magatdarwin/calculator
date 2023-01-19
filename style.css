@@ -49,6 +49,9 @@ body {
   height: 88px;
   border-radius: 10px;
   margin: 5px;
+
+  background-color: #9d9d9d;
+  /* color: #d8d8d8; */
 }
 
 .default {
@@ -57,4 +60,22 @@ body {
 
 .long {
   flex-grow: 1;
+}
+
+.warning {
+  background-color: #f0d466;
+}
+
+.danger {
+  background-color: #dc5555;
+}
+
+.operation {
+  /* background-color: #34a9c6; */
+  background-color: #252525;
+  color: white;
+}
+
+.button:hover, .active {
+  filter: brightness(0.7);
 }

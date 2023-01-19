@@ -120,6 +120,28 @@ function decode(str) {
     return txt.documentElement.textContent;
 }
 
+function toggleActive(event) {
+    let temp = event.key;
+    let input;
+
+    if(!isNaN(Number(temp)) || temp === '.') {
+        input = temp;
+    }
+    else if (KEYDOWN_MAP[temp] !== undefined) {
+        input = KEYDOWN_MAP[temp];
+    }
+    else return;
+
+    const button = document.querySelector(`button[value="${input}"]`);
+
+    if(event.type === 'keydown') {
+        button.classList.add('active');
+    }
+    else if(event.type === 'keyup') {
+        button.classList.remove('active');
+    }
+}
+
 const OPERATORS = ['add', 'subtract', 'multiply', 'divide'];
 const KEYDOWN_MAP = {
     '+' : 'add',
@@ -148,3 +170,5 @@ initializeValues();
 const buttons = document.querySelectorAll('.button');
 buttons.forEach(button => button.addEventListener('click', updateCalculator));
 window.addEventListener('keydown', updateCalculator);
+window.addEventListener('keydown', toggleActive);
+window.addEventListener('keyup', toggleActive);
